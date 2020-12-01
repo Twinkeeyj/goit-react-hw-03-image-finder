@@ -1,19 +1,19 @@
+import Loader from 'react-loader-spinner';
 import React from 'react';
-import PropTypes from 'prop-types';
-//import { Test } from './Loader.styles';
 
-const Loader = (props) => (
-  <div className="LoaderWrapper">
-    Test content
-  </div>
-);
-
-Loader.propTypes = {
-  // bla: PropTypes.string,
-};
-
-Loader.defaultProps = {
-  // bla: 'test',
-};
-
-export default Loader;
+export default class Loaders extends React.Component {
+  render() {
+    return (
+      <>
+      <Loader
+        type="Bars"
+        color="#00BFFF"
+        height={100}
+        width={100}
+        timeout={3000}
+      />
+      <h1>{this.props.text}</h1>
+      </>
+    );
+  }
+}

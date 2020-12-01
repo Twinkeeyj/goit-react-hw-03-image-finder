@@ -3,8 +3,10 @@ import axios from 'axios';
 
 import Searchbar from './components/Searchbar/Searchbar';
 import ImageGallery from './components/ImageGallery/ImageGallery';
-import Button from "./components/Button/Button"
-import DataApi from "./services/dataApi"
+import Button from './components/Button/Button';
+import DataApi from './services/dataApi';
+import Loaders from './components/Loader/Loader';
+import Modal from './components/Modal/Modal';
 
 export default class App extends Component {
   state = {
@@ -14,6 +16,7 @@ export default class App extends Component {
     query: '',
     page: 1,
     key: '18953404-219a87b5236596fa40acd8a55',
+    largeImageURL: null,
   };
   componentDidUpdate(prevProps, prevState) {
     const prevQuery = prevState.query;
@@ -21,60 +24,72 @@ export default class App extends Component {
     if (prevQuery !== nextQuery) {
       this.fetchData();
     }
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: 'smooth',
+    });
   }
 
-  // componentDidMount() {
-  //   this.setState({
-  //     loading: true,
-  //   });
-  //   this.fetchArticles();
-  // }
+  fetchData = () => {
+    // if(this.state.data.length <1){
+    //   this.setState({error: true})
+    // }
 
-  // fetchArticles = () => {
-    // const { query, page, key } = this.state;
-    // axios
-    //   .get(
-    //     `https://pixabay.com/api/?q=${query}&page=${page}&key=${key}&image_type=photo&orientation=horizontal&per_page=12`,
-    //   )
-    fetchData=()=>{
+    this.setState({ loading: true });
     const { query, page, key } = this.state;
 
-    DataApi
-    .fetchDataWithQuery(query, page, key)
+    DataApi.fetchDataWithQuery(query, page, key)
 
-    .then(data =>
-        this.setState(prevState=>({
-         data: [...prevState.data, ...data],
-         page: prevState.page+1,
-        }))
-      )
+    .then((data) => {
+      if (data.length < 1) {
+        this.setState({ error: true });
+      } else {
+        this.setState((prevState) => ({
+          data: [...prevState.data, ...data],
+          page: prevState.page + 1,
+          error: false,
+        }));
+
+      }
+    })
       .catch(error => this.setState({ error }))
       .finally(() => this.setState({ loading: false }));
-  }
+  };
   handleSearch = queryOn => {
     this.setState({
+      data:[]
+    })
+    this.setState({
       query: queryOn,
+
     });
   };
+  openModal=largeImageURL=>{
+       this.setState({
+      largeImageURL: largeImageURL,
+    });
+    }
 
-
+  modalClose = () => {
+    this.setState(prevState => ({ largeImageURL: !prevState.largeImageURL }));
+  };
 
   render() {
-    const { data, loading, error } = this.state;
-
-    return (
+    const { data, loading, error, largeImageURL } = this.state;
+       return (
       <div>
         <Searchbar onSubmit={this.handleSearch} />
-        {error && <p>ERORR</p>}
-        {loading && <p>Loading...</p>}
-        {loading ? <p>Loading...</p> : <ImageGallery data={data} />}
-        {data.length>0 &&<Button handleClick={this.fetchData}/>}
-        </div>
-      );
+        {error && <Loaders text="ERRoR" />}
+        {loading ? <Loaders text="Loading..." /> : <ImageGallery openModal={this.openModal} data={data} />}
+        {data.length > 0 && <Button handleClick={this.fetchData} />}
+        {largeImageURL &&
+          <Modal
+            onSubmit={this.openModal}
+            largeImageURL={largeImageURL}
+            modalClose={this. modalClose}
+          />
+        }
+      </div>
+    );
   }
- }
-
-
-// this.setState(prevStatr=>({
-
-// }))
+}

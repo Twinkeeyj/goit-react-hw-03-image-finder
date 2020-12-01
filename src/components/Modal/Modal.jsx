@@ -1,19 +1,36 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-//import { Test } from './Modal.styles';
 
-const Modal = (props) => (
-  <div className="ModalWrapper">
-    Test content
-  </div>
-);
+export default class Modal extends Component {
+  static propTypes={
+    modal:PropTypes.func,
+    largeImageURL: PropTypes.string.isRequired,
+  }
+  modal = e => {
 
-Modal.propTypes = {
-  // bla: PropTypes.string,
-};
+    if (e.code === 'Escape' || e.target.nodeName !=="IMG") {
+      this.props. modalClose();
+      // console.dir(e.target);
+    }
+  };
 
-Modal.defaultProps = {
-  // bla: 'test',
-};
+  componentDidMount = () => {
+    window.addEventListener('keydown', this.modal);
+    window.addEventListener('click', this.modal);
+  };
 
-export default Modal;
+  componentWillUnmount = () => {
+    window.removeEventListener('keydown', this.modal);
+    window.removeEventListener('click', this.modal);
+  };
+
+  render() {
+    return (
+      <div className="Overlay">
+      <div className="Modal">
+        <img src={this.props.largeImageURL} alt="" />
+      </div>
+    </div>
+    );
+  }
+}

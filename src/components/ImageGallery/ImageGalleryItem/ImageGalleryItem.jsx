@@ -1,15 +1,24 @@
-import React from 'react';
-// import PropTypes from 'prop-types';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 
 
-const ImageGalleryItem=function ({id,src}) {
- return(<>
-<li  className="ImageGalleryItem">
-  <img src={src} alt="" className="ImageGalleryItem-image" />
+
+export default class ImageGalleryItem extends Component {
+  static propTypes={
+onClick: PropTypes.func
+  }
+
+  newModal=(e)=>{
+   this.props.openModal(this.props.largeImageURL)
+  }
+  render(){
+ return(
+ <>
+<li  className="ImageGalleryItem" onClick={this.newModal}>
+  <img key={this.props.largeImageURL} src={this.props.src}  className="ImageGalleryItem-image"  />
 </li>
 </>
 )
-
+ }
 }
 
-export default ImageGalleryItem;
