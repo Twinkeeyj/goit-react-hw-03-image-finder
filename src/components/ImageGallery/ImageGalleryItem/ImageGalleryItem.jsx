@@ -15,8 +15,9 @@ onClick: PropTypes.func
  return(
  <>
 <li  className="ImageGalleryItem" onClick={this.newModal}>
-  <img key={this.props.largeImageURL} src={this.props.src}  className="ImageGalleryItem-image"  />
+  <img key={this.props.largeImageURL}alt="img" src={this.props.src}  className="ImageGalleryItem-image"  />
 </li>
+
 </>
 )
  }

@@ -9,7 +9,7 @@ export default class Modal extends Component {
   modal = e => {
 
     if (e.code === 'Escape' || e.target.nodeName !=="IMG") {
-      this.props. modalClose();
+      this.props.modalClose();
       // console.dir(e.target);
     }
   };

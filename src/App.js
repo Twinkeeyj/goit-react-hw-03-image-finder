@@ -14,7 +14,6 @@ export default class App extends Component {
     error: null,
     query: '',
     page: 1,
-    key: '18953404-219a87b5236596fa40acd8a55',
     largeImageURL: null,
   };
   componentDidUpdate(prevProps, prevState) {
@@ -35,9 +34,9 @@ export default class App extends Component {
     // }
 
     this.setState({ loading: true });
-    const { query, page, key } = this.state;
+    const { query, page } = this.state;
 
-    DataApi.fetchDataWithQuery(query, page, key)
+    DataApi.fetchDataWithQuery(query, page)
 
       .then(data => {
         if (data.length < 1) {
